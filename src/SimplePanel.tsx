@@ -34,6 +34,7 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
    * @returns JSON with the value of each of the device properties at the given time
    */
   const getDataFromDevice = (deviceId:string) => {
+    console.log(data)
     var res:any = {}
     data.series.forEach((serie) => {
       serie.fields.forEach((field) => {
@@ -48,7 +49,7 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
 
             if(field.state && field.state.calcs && field.state.calcs !== {}) {
               const calcs = field.state.calcs
-              valueProperty = (calcs['lastNotNull']) ? calcs.lastNotNull : Object.keys(calcs)[0]
+              valueProperty = (calcs['lastNotNull']) ? calcs.lastNotNull : field.values.get(field.values.length-1)
             }
 
             res[nameProperty] = valueProperty
