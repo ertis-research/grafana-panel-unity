@@ -28,6 +28,18 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
     codeUrl: "public/unitybuild/" + options.folderUnityBuild + "/" + options.nameOfFilesUnityBuild + ".wasm"
   })
 
+  const getAllDevicesId = () => {
+    var res:any = new Set()
+    data.series.forEach((serie) => {
+      serie.fields.forEach((field) => {
+        if (field.labels && field.labels[options.field_deviceId] !== null) {
+          res.add(field.labels[options.field_deviceId])
+        }
+      })
+    })
+    return Array.from<string>(res)
+  }
+
   /**
    * 
    * @param deviceId 
@@ -62,6 +74,17 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
   useEffect(() => {
     unityContext.on(options.messageUnityToGetData, handleOnSendDataToUnity)
   }, [])  
+
+  useEffect(() => {
+    getAllDevicesId().forEach((deviceId:string) => {
+      unityContext.send(
+        deviceId,
+        options.functionUnityToReceiveData,
+        JSON.stringify(getDataFromDevice(deviceId))
+      )
+      console.log("UnityContext send to deviceId " + deviceId)
+    })
+  }, [data]) 
 
   const handleOnSendDataToUnity = (deviceId : string) => {
       console.log("deviceId: " + deviceId)
