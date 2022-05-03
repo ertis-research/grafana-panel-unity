@@ -3,7 +3,7 @@ import { PanelProps } from '@grafana/data'
 import { SimpleOptions } from 'types'
 import Unity from 'react-unity-webgl'
 import { getLocationSrv } from '@grafana/runtime'
-import { getUnityContext, setUnityContext } from 'auxUnityContext'
+import { setUnityContext } from 'auxUnityContext'
 
 
 interface Props extends PanelProps<SimpleOptions> {}
@@ -12,7 +12,7 @@ interface Props extends PanelProps<SimpleOptions> {}
 
 export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) => {
 
-  var unityContext = getUnityContext()
+  var unityContext = setUnityContext(options.folderUnityBuild, options.nameOfFilesUnityBuild)
 
   //Variables que tengo que pasar a opciones
   //const field_deviceId = "headers_hono-device-id"
