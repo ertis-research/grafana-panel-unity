@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
 import { PanelProps } from '@grafana/data'
 import { SimpleOptions } from 'types'
-import Unity, { UnityContext } from 'react-unity-webgl'
+import Unity from 'react-unity-webgl'
 import { getLocationSrv } from '@grafana/runtime'
+import { getUnityContext, setUnityContext } from 'auxUnityContext'
 
 
 interface Props extends PanelProps<SimpleOptions> {}
@@ -10,6 +11,8 @@ interface Props extends PanelProps<SimpleOptions> {}
 
 
 export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) => {
+
+  var unityContext = getUnityContext()
 
   //Variables que tengo que pasar a opciones
   //const field_deviceId = "headers_hono-device-id"
@@ -20,13 +23,13 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
   //const functionUnityToReceiveData = "SetValues"
   //const folderUnityBuild = "raspberry"
   //const nameOfFilesUnityBuild = "myunityapp"
-
+/*
   const unityContext = new UnityContext({
     loaderUrl: "public/unitybuild/" + options.folderUnityBuild + "/" + options.nameOfFilesUnityBuild + ".loader.js",
     dataUrl: "public/unitybuild/" + options.folderUnityBuild + "/" + options.nameOfFilesUnityBuild + ".data",
     frameworkUrl: "public/unitybuild/" + options.folderUnityBuild + "/" + options.nameOfFilesUnityBuild + ".framework.js",
     codeUrl: "public/unitybuild/" + options.folderUnityBuild + "/" + options.nameOfFilesUnityBuild + ".wasm"
-  })
+  })*/
 
   const getAllDevicesId = () => {
     var res:any = new Set()
@@ -72,12 +75,17 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
   }
 
   useEffect(() => {
-    unityContext.on(options.messageUnityToGetData, handleOnSendDataToUnity)
+    unityContext = setUnityContext(options.folderUnityBuild, options.nameOfFilesUnityBuild)
+  }, [options])
+
+  useEffect(() => {
+    unityContext = setUnityContext(options.folderUnityBuild, options.nameOfFilesUnityBuild)
+    if(unityContext !== undefined) unityContext.on(options.messageUnityToGetData, handleOnSendDataToUnity)
   }, [])  
 
   useEffect(() => {
     getAllDevicesId().forEach((deviceId:string) => {
-      unityContext.send(
+      if(unityContext !== undefined) unityContext.send(
         deviceId,
         options.functionUnityToReceiveData,
         JSON.stringify(getDataFromDevice(deviceId))
@@ -98,18 +106,27 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
         replace: true,
       });
 
-      unityContext.send(
-        deviceId,
-        options.functionUnityToReceiveData,
-        JSON.stringify(getDataFromDevice(deviceId))
-      )
-      console.log("UnityContext send")
+      if(unityContext !== undefined){
+        unityContext.send(
+          deviceId,
+          options.functionUnityToReceiveData,
+          JSON.stringify(getDataFromDevice(deviceId))
+        )
+        console.log("UnityContext send")
+      } 
     
   }
 
-  return (
-    <div>
-      <Unity style={{width:width, height:height}} unityContext={unityContext}/>
-    </div>
-  )
+  if(unityContext !== undefined){
+    return (
+      <div>
+        <Unity style={{width:width, height:height}} unityContext={unityContext}/>
+      </div>
+    )
+  } else {
+    return (
+      <div></div>
+    )
+  }
+  
 };
