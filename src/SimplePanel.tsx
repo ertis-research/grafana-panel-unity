@@ -59,7 +59,9 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
 
             const name = field.name
             const endSubstring = (name.includes(options.property_end)) ? name.indexOf(options.property_end) : name.length
-            const nameProperty = name.substring(((options.property_start).length), endSubstring)
+            var nameProperty = name.substring(((options.property_start).length), endSubstring)
+            const subName = name.substring((endSubstring + options.property_end.length))
+            nameProperty = nameProperty + subName
             var valueProperty = null
 
             if(field.state && field.state.calcs && field.state.calcs !== {}) {
