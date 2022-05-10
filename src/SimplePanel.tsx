@@ -122,7 +122,7 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
   if(unityContext !== undefined){
     return (
       <div>
-        <Unity style={{width:width, height:height}} unityContext={unityContext}/>
+        <Unity style={{width:width, height:height}} unityContext={unityContext} tabIndex={1}/>
       </div>
     )
   } else {
