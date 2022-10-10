@@ -1,28 +1,28 @@
 import { PanelPlugin } from '@grafana/data';
+import { UnityPanel } from 'UnityPanel';
 import { SimpleOptions } from './types';
-import { SimplePanel } from './SimplePanel';
 
-export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOptions(builder => {
+export const plugin = new PanelPlugin<SimpleOptions>(UnityPanel).setPanelOptions(builder => {
   return builder
     .addTextInput({
       path: 'field_deviceId',
-      name: 'Field of the device id',
-      description: 'Name of the query field that indicates the id of the device to which the data refers.',
-      defaultValue: 'headers_hono-device-id',
+      name: 'Field of the id',
+      description: 'Name of the query field that indicates the id to which the data refers.',
+      defaultValue: 'thingId',
       category: ['Data options']
     })
-    .addTextInput({
-      path: 'property_start',
-      name: 'Text before property names',
-      description: 'Text that precedes the name of the device properties in the query field. For example, if the field of the query that indicates the temperature property is headers_temperature_properties_value then the value in this section must be headers_.',
-      defaultValue: 'value_',
+    .addStringArray({
+      path: 'variables_to_send',
+      name: 'Variables to send',
+      description: 'Variables to be sent together with the temporary data. To specify dashboard variables, precede them with $ (example: $ini_time). You can add other variables using the format NAME:VALUE (example: board_name:test).',
+      defaultValue: [],
       category: ['Data options']
     })
-    .addTextInput({
-      path: 'property_end',
-      name: 'Text after property names',
-      description: 'Text that follows the name of the device properties in the query field. For example, if the field of the query that indicates the temperature property is headers_temperature_properties_value, then the value in this section must be _properties.',
-      defaultValue: '_properties',
+    .addStringArray({
+      path: 'fields_to_send',
+      name: 'Fields to send',
+      description: 'List of fields to be sent to the Unity model. If this field is not filled in, all available fields will be sent.',
+      defaultValue: [],
       category: ['Data options']
     })
     .addTextInput({
@@ -35,13 +35,28 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
     .addTextInput({
       path: 'messageUnityToGetData',
       name: 'Unity event to get data',
-      description: 'Name of the event sent by Unity to the panel to obtain the information of a device.',
+      description: 'Name of the event sent by Unity to the panel to set dashboard variable.',
       defaultValue: 'GetData',
       category: ['Unity options']
     })
+    .addBooleanSwitch({
+      path: 'useSpecificGameObject',
+      name: 'Send data to a specific gameobject',
+      description: 'Enable to send the data to a specific Unity gameobject. Disable to send the data of each identifier to a gameobject with the same identifier.',
+      defaultValue: true,
+      category: ['Unity options']
+    })
+    .addTextInput({
+      path: 'gameObjectUnityToReceiveData',
+      name: 'Unity GameObject that will receive the data',
+      description: 'Name of the Unity gameobject that receives the data provided by the query. It must contain the receiving function indicated in the following field.',
+      defaultValue: '',
+      category: ['Unity options'],
+      showIf: (config: SimpleOptions) => config.useSpecificGameObject
+    })
     .addTextInput({
       path: 'functionUnityToReceiveData',
-      name: 'Unity function that will get the data',
+      name: 'Unity function that will receive the data',
       description: 'Name of the Unity function that receives the data provided by the query. In this function we can make our model change depending on the information received.',
       defaultValue: 'SetValues',
       category: ['Unity options']
