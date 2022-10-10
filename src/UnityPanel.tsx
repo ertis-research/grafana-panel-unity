@@ -16,15 +16,16 @@ export const UnityPanel: React.FC<Props> = ({ options, data, width, height }) =>
 
   const [mode, setMode] = useState<Mode>(Mode.specificGameObject)
   const [unityContext, setUnityContext] = useState<UnityContext>()
+  const [isLoaded, setIsLoaded] = useState(false)
 
   const createUnityContext = () => {
     const folder = options.folderUnityBuild
     const filesName = options.nameOfFilesUnityBuild
     setUnityContext(new UnityContext({
-            loaderUrl: "public/unitybuild/" + folder + "/" + filesName + ".loader.js",
-            dataUrl: "public/unitybuild/" + folder + "/" + filesName + ".data",
-            frameworkUrl: "public/unitybuild/" + folder + "/" + filesName + ".framework.js",
-            codeUrl: "public/unitybuild/" + folder + "/" + filesName + ".wasm"
+      loaderUrl: "public/unitybuild/" + folder + "/" + filesName + ".loader.js",
+      dataUrl: "public/unitybuild/" + folder + "/" + filesName + ".data",
+      frameworkUrl: "public/unitybuild/" + folder + "/" + filesName + ".framework.js",
+      codeUrl: "public/unitybuild/" + folder + "/" + filesName + ".wasm"
     }))
   }
 
@@ -151,12 +152,18 @@ export const UnityPanel: React.FC<Props> = ({ options, data, width, height }) =>
   useEffect(() => {
     setMode((options.useSpecificGameObject) ? Mode.specificGameObject : Mode.identifierAsGameObject)
     createUnityContext()
-    if(unityContext !== undefined) unityContext.on(options.messageUnityToGetData, handleDataFromUnity)
   }, [options])
 
   useEffect(() => {
-    console.log("useEffect data options")
     if(unityContext !== undefined) {
+      unityContext.on(options.messageUnityToGetData, handleDataFromUnity)
+      unityContext.on("loaded", () => setIsLoaded(true))
+    }
+  }, [unityContext])
+
+  useEffect(() => {
+    console.log("useEffect data options")
+    if(unityContext != undefined && isLoaded) {
       var vars = getVariables(options.variables_to_send)
       if (Object.keys(vars).length > 0) vars = {
         variables: vars
@@ -177,7 +184,7 @@ export const UnityPanel: React.FC<Props> = ({ options, data, width, height }) =>
         
       }
     }
-  }, [data, options, unityContext])
+  }, [data, options, isLoaded])
 
   return (unityContext !== undefined) ?
       <div>
