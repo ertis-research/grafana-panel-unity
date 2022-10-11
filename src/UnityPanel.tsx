@@ -65,20 +65,28 @@ export const UnityPanel: React.FC<Props> = ({ options, data, width, height }) =>
   }
 */
 
-  const addToObject = (res:any, time:number, name:string, value: string|number, id:string) => {
-    var aux_time = (res[time]) ? res[time] : {}
-    var aux_id = (res[time] && res[time][id]) ? res[time][id] : {}
+  const addToObject = (res:any, first:number|string, second:number|string, field:string, value: string|number) => {
+    var aux_time = (res[first]) ? res[first] : {}
+    var aux_id = (res[first] && res[first][second]) ? res[first][second] : {}
     return {
       ...res,
-      [time] : {
+      [first] : {
         ...aux_time,
-        [id] : {
+        [second] : {
           ...aux_id,
-          [name] : value
+          [field] : value
           
         }
       }
     }
+  }
+
+  const addToObjectById = (res:any, time:number, field:string, value: string|number, id:string) => {
+    return addToObject(res, id, time, field, value)
+  }
+
+  const addToObjectByTime = (res:any, time:number, field:string, value: string|number, id:string) => {
+    return addToObject(res, time, id, field, value)
   }
 
   const getVariables = (variables:string[]=[]) => {
@@ -114,8 +122,9 @@ export const UnityPanel: React.FC<Props> = ({ options, data, width, height }) =>
   }
 
   const getAllData = (fields:string[]=[]) => {
-    //Initialise result
+    //Initialise result and select add function
     var res:any = {}
+    const funcAdd = (mode == Mode.specificGameObject) ? addToObjectByTime : addToObjectById
     //Filter the series by those with fields I am interested in.
     var series:DataFrame[] = (fields.length == 0) ? data.series : data.series.filter(s => s.fields.some(r => fields.includes(r.name)))
     //Scroll through the series
@@ -128,7 +137,7 @@ export const UnityPanel: React.FC<Props> = ({ options, data, width, height }) =>
         searched_fields.forEach((field) => {
           const id = (field.labels) ? field.labels[options.field_deviceId] : "undefined"
           for(var i=0; i<serie.length;  i++){
-            res = addToObject(res, time_field.values.get(i), field.name, field.values.get(i), id)
+            res = funcAdd(res, time_field.values.get(i), field.name, field.values.get(i), id)
           }
         })
       }
@@ -168,23 +177,28 @@ export const UnityPanel: React.FC<Props> = ({ options, data, width, height }) =>
       if (Object.keys(vars).length > 0) vars = {
         variables: vars
       }
-      const data = {
-        ...vars,
-        series: getAllData(options.fields_to_send)
-      }
-
+      var dataToSend = getAllData(options.fields_to_send)
+      console.log(dataToSend)
       if(mode == Mode.specificGameObject){
-        console.log(data)
+        dataToSend = { ...vars, series: dataToSend }
         unityContext.send(
           options.gameObjectUnityToReceiveData,
           options.functionUnityToReceiveData,
-          JSON.stringify(data)
+          JSON.stringify(dataToSend)
         )
       } else {
-        
+        Object.keys(dataToSend).forEach((id:string) => {
+          var data_id = { ...vars, series: dataToSend[id] }
+          unityContext.send(
+            id,
+            options.functionUnityToReceiveData,
+            JSON.stringify(data_id)
+          )
+        })
       }
+      console.log("Todo enviado")
     }
-  }, [data, options, isLoaded])
+  }, [data, options, isLoaded, mode])
 
   return (unityContext !== undefined) ?
       <div>
