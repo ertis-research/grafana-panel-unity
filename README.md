@@ -1,44 +1,54 @@
-# Grafana Panel Plugin Template
+# Digital Twins plugin for Grafana
 
-[![Build](https://github.com/grafana/grafana-starter-panel/workflows/CI/badge.svg)](https://github.com/grafana/grafana-starter-panel/actions?query=workflow%3A%22CI%22)
+This plugin allows the rendering of Unity WebGL builds in a Grafana panel, which can be placed on any dashboard. Furthermore, the panel allows two-way interaction between the Grafana dashboard and the Unity 3D build. It has been designed specifically to support [our digital twin platform](https://github.com/ertis-research/digital-twins-platform), but can be used in other scenarios.
 
-This template is a starting point for building Grafana Panel Plugins in Grafana 7.0+
+## Table of Contents
+- [Changelog](#changelog)
+- [Installation](#installation)
+   - [Requirements](#requirements)
+   - [Build plugin](#build-plugin)
+   - [Activation](#activation)
+- [Usage](#usage)
+- [License](#license)
 
-## What is Grafana Panel Plugin?
+## Changelog
 
-Panels are the building blocks of Grafana. They allow you to visualize data in different ways. While Grafana has several types of panels already built-in, you can also build your own panel, to add support for other visualizations.
+## Installation
 
-For more information about panels, refer to the documentation on [Panels](https://grafana.com/docs/grafana/latest/features/panels/panels/)
+### Requirements
+- [Grafana >= 7.0](https://grafana.com/)
+- [NodeJS >= 14](https://nodejs.org/es/)
+- [yarn](https://yarnpkg.com/)
 
-## Getting started
+### Build plugin
 
-1. Install dependencies
+This plugin is like any other Grafana plugin, so you can also follow the instructions on their page. It is also explained step-by-step below.
 
+1. Download the code or clone it.
+   ```bash
+   git clone https://github.com/ertis-research/unity-plugin-for-grafana.git
+   ```
+2. Move the code to the folder you have assigned in Grafana for plugins. This folder is indicated in the Grafana [configuration file](https://grafana.com/docs/grafana/v9.0/setup-grafana/configure-grafana/#plugins), where you can also change its path if you see it convenient. 
+
+3. The plugin is currently unsigned, so it is necessary to activate Grafana's development mode to use it. To do this, the [*app_mode*](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#app_mode) variable in the Grafana configuration file must be changed to *development* and then Grafana must be [restarted](https://grafana.com/docs/grafana/v9.0/setup-grafana/restart-grafana/).
+
+4. Access the root folder of the code in a terminal.
+
+5. Run the following command to install the dependencies. 
    ```bash
    yarn install
    ```
 
-2. Build plugin in development mode or run in watch mode
-
+6. Run the following command to build the plugin.
    ```bash
    yarn dev
    ```
+7. For Grafana to detect the plugin for the first time it usually needs to be [restarted](https://grafana.com/docs/grafana/v9.0/setup-grafana/restart-grafana/).
 
-   or
+At this point the plugin should already be installed and activated. If we go into Grafana and enter `configuration > plugins`, it will be in the list. 
 
-   ```bash
-   yarn watch
-   ```
+![Plugin in list](src/img/readme/plugins-list-unity.JPG)
 
-3. Build plugin in production mode
+## Usage
 
-   ```bash
-   yarn build
-   ```
-
-## Learn more
-
-- [Build a panel plugin tutorial](https://grafana.com/tutorials/build-a-panel-plugin)
-- [Grafana documentation](https://grafana.com/docs/)
-- [Grafana Tutorials](https://grafana.com/tutorials/) - Grafana Tutorials are step-by-step guides that help you make the most of Grafana
-- [Grafana UI Library](https://developers.grafana.com/ui) - UI components to help you build interfaces using Grafana Design System
+## License
