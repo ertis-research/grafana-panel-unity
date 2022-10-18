@@ -51,6 +51,7 @@ At this point the plugin should already be installed and activated. If we go int
 
 ## Usage
 
+<<<<<<< HEAD
 ### Unity build requirements
 The content of the Unity build will depend on what is being reproduced, but **in all cases it must have certain requirements**. 
 
@@ -70,4 +71,6 @@ Build Settings             |  Project Settings
 
 ### Grafana to Unity interaction
 
+=======
+>>>>>>> c278e1af8cd60d255d5ea56872baee42e5f59a24
 ## License
