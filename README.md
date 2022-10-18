@@ -7,7 +7,6 @@ This plugin allows the rendering of Unity WebGL builds in a Grafana panel, which
 - [Installation](#installation)
    - [Requirements](#requirements)
    - [Build plugin](#build-plugin)
-   - [Activation](#activation)
 - [Usage](#usage)
 - [License](#license)
 
@@ -51,7 +50,6 @@ At this point the plugin should already be installed and activated. If we go int
 
 ## Usage
 
-<<<<<<< HEAD
 ### Unity build requirements
 The content of the Unity build will depend on what is being reproduced, but **in all cases it must have certain requirements**. 
 
@@ -61,7 +59,9 @@ In addition to this script, it is important to build the Unity model correctly. 
 
 Build Settings             |  Project Settings  
 :-------------------------:|:-------------------------:
-![](src/img/readme/unity-export-1.JPG)  |  ![](src/img/readme/unity-export-1.JPG)
+![](src/img/readme/unity-export-1.JPG)  |  ![](src/img/readme/unity-export-2.JPG)
+
+Once we click on *Build* we will obtain 4 files that we will need to load the model in the panel.
 
 ### Adding Unity panel to Grafana dashboard
 
@@ -71,6 +71,4 @@ Build Settings             |  Project Settings
 
 ### Grafana to Unity interaction
 
-=======
->>>>>>> c278e1af8cd60d255d5ea56872baee42e5f59a24
 ## License
