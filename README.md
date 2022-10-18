@@ -1,4 +1,4 @@
-# Digital Twins plugin for Grafana
+# Unity plugin for Grafana
 
 This plugin allows the rendering of Unity WebGL builds in a Grafana panel, which can be placed on any dashboard. Furthermore, the panel allows two-way interaction between the Grafana dashboard and the Unity 3D build. It has been designed specifically to support [our digital twin platform](https://github.com/ertis-research/digital-twins-platform), but can be used in other scenarios.
 
@@ -50,5 +50,24 @@ At this point the plugin should already be installed and activated. If we go int
 ![Plugin in list](src/img/readme/plugins-list-unity.JPG)
 
 ## Usage
+
+### Unity build requirements
+The content of the Unity build will depend on what is being reproduced, but **in all cases it must have certain requirements**. 
+
+The Unity model shall include the X script, which basically removes the capture of all keyboard inputs by Unity. This will allow the rest of the Grafana dashboard functions to still be used without any problems. This script should be added to any element of the model that will always be rendered (e.g. the main camera). You can also skip the file and add the instruction it contains directly to one of your scripts, the important thing is that you disable that function.
+
+In addition to this script, it is important to build the Unity model correctly. In `File > Build Settings...` choose the **WebGL format** and in `Player Settings...` disable the compression format. It is not necessary to modify the default value of the rest of the other build options.
+
+Build Settings             |  Project Settings  
+:-------------------------:|:-------------------------:
+![](src/img/readme/unity-export-1.JPG)  |  ![](src/img/readme/unity-export-1.JPG)
+
+### Adding Unity panel to Grafana dashboard
+
+### Load Unity build in the panel
+
+### Unity to Grafana interaction
+
+### Grafana to Unity interaction
 
 ## License
