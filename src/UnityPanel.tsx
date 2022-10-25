@@ -178,9 +178,10 @@ export const UnityPanel: React.FC<Props> = ({ options, data, width, height }) =>
         variables: vars
       }
       var dataToSend = getAllData(options.fields_to_send)
-      console.log(dataToSend)
+      
       if(mode == Mode.specificGameObject){
         dataToSend = { ...vars, series: dataToSend }
+        console.log(dataToSend)
         unityContext.send(
           options.gameObjectUnityToReceiveData,
           options.functionUnityToReceiveData,
@@ -189,6 +190,7 @@ export const UnityPanel: React.FC<Props> = ({ options, data, width, height }) =>
       } else {
         Object.keys(dataToSend).forEach((id:string) => {
           var data_id = { ...vars, series: dataToSend[id] }
+          console.log(data_id)
           unityContext.send(
             id,
             options.functionUnityToReceiveData,
