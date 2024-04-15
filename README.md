@@ -1,16 +1,13 @@
-# Unity plugin for Grafana
+# Unity WebGL Grafana panel plugin
 
-This plugin allows the rendering of Unity WebGL builds in a Grafana panel, which can be placed on any dashboard. Furthermore, the panel allows two-way interaction between the Grafana dashboard and the Unity 3D build. It has been designed specifically to support [our digital twin platform](https://github.com/ertis-research/digital-twins-platform), but can be used in other scenarios.
+This plugin provides a solution to render Unity WebGL builds directly inside a Grafana panel, allowing its integration into any dashboard. It also enables a bi-directional interaction between Grafana and Unity. This means that the Unity build can take advantage of data coming from Grafana data sources, and in turn, the running build can send data to the dashboard, affecting the rest of the dashboard. Of course, if the Unity compilation allows users to interact with it, this functionality will still be possible even if it is within a Grafana dashboard. Although it was originally designed as an extension to [OpenTwins](https://github.com/ertis-research/opentwins), our digital twin platform, it has no dependency on it, making it a versatile tool suitable for a variety of scenarios.
 
 ## Table of Contents
-- [Changelog](#changelog)
 - [Installation](#installation)
    - [Requirements](#requirements)
    - [Build plugin](#build-plugin)
 - [Usage](#usage)
 - [License](#license)
-
-## Changelog
 
 ## Installation
 
@@ -27,6 +24,7 @@ This plugin is like any other Grafana plugin, so you can also follow the instruc
    ```bash
    git clone https://github.com/ertis-research/unity-plugin-for-grafana.git
    ```
+
 2. Move the code to the folder you have assigned in Grafana for plugins. This folder is indicated in the Grafana [configuration file](https://grafana.com/docs/grafana/v9.0/setup-grafana/configure-grafana/#plugins), where you can also change its path if you see it convenient. 
 
 3. The plugin is currently unsigned, so it is necessary to activate Grafana's development mode to use it. To do this, the [*app_mode*](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#app_mode) variable in the Grafana configuration file must be changed to *development* and then Grafana must be [restarted](https://grafana.com/docs/grafana/v9.0/setup-grafana/restart-grafana/).

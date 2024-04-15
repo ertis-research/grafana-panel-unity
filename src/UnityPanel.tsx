@@ -5,7 +5,7 @@ import Unity, { UnityContext } from 'react-unity-webgl'
 import { getLocationSrv, getTemplateSrv } from '@grafana/runtime'
 
 
-interface Props extends PanelProps<SimpleOptions> {}
+interface Props extends PanelProps<SimpleOptions> { }
 
 enum Mode {
   specificGameObject,
@@ -38,7 +38,7 @@ export const UnityPanel: React.FC<Props> = ({ options, data, width, height }) =>
   /*
   const getDataFromDevice = (deviceId:string) => {
     console.log(data)
-    var res:any = {}
+    let res:any = {}
     data.series.forEach((serie) => {
       serie.fields.forEach((field) => {
         if(field.name.startsWith(options.property_start) && field.labels
@@ -47,10 +47,10 @@ export const UnityPanel: React.FC<Props> = ({ options, data, width, height }) =>
 
             const name = field.name
             const endSubstring = (name.includes(options.property_end)) ? name.indexOf(options.property_end) : name.length
-            var nameProperty = name.substring(((options.property_start).length), endSubstring)
+            let nameProperty = name.substring(((options.property_start).length), endSubstring)
             const subName = name.substring((endSubstring + options.property_end.length))
             nameProperty = nameProperty + subName
-            var valueProperty = null
+            let valueProperty = null
 
             if(field.state && field.state.calcs && field.state.calcs !== {}) {
               const calcs = field.state.calcs
@@ -65,51 +65,51 @@ export const UnityPanel: React.FC<Props> = ({ options, data, width, height }) =>
   }
 */
 
-  const addToObject = (res:any, first:number|string, second:number|string, field:string, value: string|number) => {
-    var aux_time = (res[first]) ? res[first] : {}
-    var aux_id = (res[first] && res[first][second]) ? res[first][second] : {}
+  const addToObject = (res: any, first: number | string, second: number | string, field: string, value: string | number) => {
+    let aux_time = (res[first]) ? res[first] : {}
+    let aux_id = (res[first] && res[first][second]) ? res[first][second] : {}
     return {
       ...res,
-      [first] : {
+      [first]: {
         ...aux_time,
-        [second] : {
+        [second]: {
           ...aux_id,
-          [field] : value
-          
+          [field]: value
+
         }
       }
     }
   }
 
-  const addToObjectById = (res:any, time:number, field:string, value: string|number, id:string) => {
+  const addToObjectById = (res: any, time: number, field: string, value: string | number, id: string) => {
     return addToObject(res, id, time, field, value)
   }
 
-  const addToObjectByTime = (res:any, time:number, field:string, value: string|number, id:string) => {
+  const addToObjectByTime = (res: any, time: number, field: string, value: string | number, id: string) => {
     return addToObject(res, time, id, field, value)
   }
 
-  const getVariables = (variables:string[]=[]) => {
-    var res:any = {}
-    const dashboard_variables:VariableModel[] = getTemplateSrv().getVariables()
-    variables = variables.filter((item:string) => item.length > 0 && (!item.startsWith("$") || item.length > 1))
-    variables.forEach((item:string) => {
-      var newItem = {}
+  const getVariables = (variables: string[] = []) => {
+    let res: any = {}
+    const dashboard_variables: VariableModel[] = getTemplateSrv().getVariables()
+    variables = variables.filter((item: string) => item.length > 0 && (!item.startsWith("$") || item.length > 1))
+    variables.forEach((item: string) => {
+      let newItem = {}
 
-      if(item.startsWith("$")){
-        var var_find = dashboard_variables.find((v:VariableModel) => v.name == item.substring(1))
-        if(var_find){
+      if (item.startsWith("$")) {
+        let var_find = dashboard_variables.find((v: VariableModel) => v.name === item.substring(1))
+        if (var_find) {
           newItem = {
-            [var_find.name] : getTemplateSrv().replace(item).trim()
+            [var_find.name]: getTemplateSrv().replace(item).trim()
           }
         }
 
       } else {
-        var split = item.split(":")
+        let split = item.split(":")
         newItem = (split.length < 2) ? {
-          [item] : item
+          [item]: item
         } : {
-          [split[0].trim()] : split.slice(1).join(":").trim()
+          [split[0].trim()]: split.slice(1).join(":").trim()
         }
       }
 
@@ -121,22 +121,22 @@ export const UnityPanel: React.FC<Props> = ({ options, data, width, height }) =>
     return res
   }
 
-  const getAllData = (fields:string[]=[]) => {
+  const getAllData = (fields: string[] = []) => {
     //Initialise result and select add function
-    var res:any = {}
-    const funcAdd = (mode == Mode.specificGameObject) ? addToObjectByTime : addToObjectById
+    let res: any = {}
+    const funcAdd: any = (mode === Mode.specificGameObject) ? addToObjectByTime : addToObjectById
     //Filter the series by those with fields I am interested in.
-    var series:DataFrame[] = (fields.length == 0) ? data.series : data.series.filter(s => s.fields.some(r => fields.includes(r.name)))
+    let series: DataFrame[] = (fields.length === 0) ? data.series : data.series.filter(s => s.fields.some(r => fields.includes(r.name)))
     //Scroll through the series
     series.forEach((serie) => {
       //Search for the time field in the series
-      const time_field = serie.fields.find((e) => e["name"] == "Time")
+      const time_field = serie.fields.find((e) => e["name"] === "Time")
       if (time_field !== undefined) {
         //Search for the fields that correspond to the ones I am looking for
-        const searched_fields = (fields.length == 0) ? serie.fields.filter(s => s.name != "Time") : serie.fields.filter(s => fields.includes(s.name))
+        const searched_fields = (fields.length === 0) ? serie.fields.filter(s => s.name !== "Time") : serie.fields.filter(s => fields.includes(s.name))
         searched_fields.forEach((field) => {
           const id = (field.labels) ? field.labels[options.field_deviceId] : "undefined"
-          for(var i=0; i<serie.length;  i++){
+          for (let i = 0; i < serie.length; i++) {
             res = funcAdd(res, time_field.values.get(i), field.name, field.values.get(i), id)
           }
         })
@@ -145,10 +145,10 @@ export const UnityPanel: React.FC<Props> = ({ options, data, width, height }) =>
     return res
   }
 
-  const handleDataFromUnity = (deviceId : string) => {
+  const handleDataFromUnity = (deviceId: string) => {
     console.log("deviceId: " + deviceId)
 
-    var queryObj:any = {}
+    let queryObj: any = {}
     queryObj[("var-" + options.variable_deviceId)] = deviceId
 
     getLocationSrv().update({
@@ -164,7 +164,7 @@ export const UnityPanel: React.FC<Props> = ({ options, data, width, height }) =>
   }, [options])
 
   useEffect(() => {
-    if(unityContext !== undefined) {
+    if (unityContext !== undefined) {
       unityContext.on(options.messageUnityToGetData, handleDataFromUnity)
       unityContext.on("loaded", () => setIsLoaded(true))
     }
@@ -172,14 +172,16 @@ export const UnityPanel: React.FC<Props> = ({ options, data, width, height }) =>
 
   useEffect(() => {
     console.log("useEffect data options")
-    if(unityContext != undefined && isLoaded) {
-      var vars = getVariables(options.variables_to_send)
-      if (Object.keys(vars).length > 0) vars = {
-        variables: vars
+    if (unityContext !== undefined && isLoaded) {
+      let vars = getVariables(options.variables_to_send)
+      if (Object.keys(vars).length > 0) {
+        vars = {
+          variables: vars
+        }
       }
-      var dataToSend = getAllData(options.fields_to_send)
-      
-      if(mode == Mode.specificGameObject){
+      let dataToSend = getAllData(options.fields_to_send)
+
+      if (mode === Mode.specificGameObject) {
         dataToSend = { ...vars, series: dataToSend }
         console.log(dataToSend)
         unityContext.send(
@@ -188,8 +190,8 @@ export const UnityPanel: React.FC<Props> = ({ options, data, width, height }) =>
           JSON.stringify(dataToSend)
         )
       } else {
-        Object.keys(dataToSend).forEach((id:string) => {
-          var data_id = { ...vars, series: dataToSend[id] }
+        Object.keys(dataToSend).forEach((id: string) => {
+          let data_id = { ...vars, series: dataToSend[id] }
           console.log(data_id)
           unityContext.send(
             id,
@@ -203,9 +205,9 @@ export const UnityPanel: React.FC<Props> = ({ options, data, width, height }) =>
   }, [data, options, isLoaded, mode])
 
   return (unityContext !== undefined) ?
-      <div>
-        <Unity style={{width:width, height:height}} unityContext={unityContext} tabIndex={1}/>
-      </div>
+    <div>
+      <Unity style={{ width: width, height: height }} unityContext={unityContext} tabIndex={1} />
+    </div>
     : <div></div>
-  
+
 };

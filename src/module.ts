@@ -1,5 +1,6 @@
 import { PanelPlugin } from '@grafana/data';
 import { UnityPanel } from 'UnityPanel';
+//import { UploadFileEditor } from 'UploadFileEditor';
 import { SimpleOptions } from './types';
 
 export const plugin = new PanelPlugin<SimpleOptions>(UnityPanel).setPanelOptions(builder => {
@@ -59,7 +60,7 @@ export const plugin = new PanelPlugin<SimpleOptions>(UnityPanel).setPanelOptions
       name: 'Unity function that will receive the data',
       description: 'Name of the Unity function that receives the data provided by the query. In this function we can make our model change depending on the information received.',
       defaultValue: 'SetValues',
-      category: ['Unity options']
+      category: ['Unity options', 'Model']
     })
     .addTextInput({
       path: 'folderUnityBuild',
@@ -76,31 +77,12 @@ export const plugin = new PanelPlugin<SimpleOptions>(UnityPanel).setPanelOptions
       category: ['Unity options']
     })
     /*
-    .addBooleanSwitch({
-      path: 'showSeriesCount',
-      name: 'Show series counter',
-      defaultValue: false,
+    .addCustomEditor({
+      id: 'uploadfiles',
+      path: 'uploadfiles',
+      name: 'Files',
+      category: ['Unity options'],
+      editor: UploadFileEditor
     })
-    .addRadio({
-      path: 'seriesCountSize',
-      defaultValue: 'sm',
-      name: 'Series counter size',
-      settings: {
-        options: [
-          {
-            value: 'sm',
-            label: 'Small',
-          },
-          {
-            value: 'md',
-            label: 'Medium',
-          },
-          {
-            value: 'lg',
-            label: 'Large',
-          },
-        ],
-      },
-      showIf: config => config.showSeriesCount,
-    });*/
+    */
 });
