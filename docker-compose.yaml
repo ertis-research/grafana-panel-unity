@@ -3,7 +3,7 @@ version: '3.0'
 services:
   grafana:
     user: root
-    container_name: 'ertis-3-d-visualization-unity'
+    container_name: 'ertis-unity-panel'
 
     platform: 'linux/amd64'
     build:
@@ -14,13 +14,13 @@ services:
     ports:
       - 3000:3000/tcp
     volumes:
-      - ./dist:/var/lib/grafana/plugins/ertis-3-d-visualization-unity
+      - ./dist:/var/lib/grafana/plugins/ertis-unity-panel
       - ./provisioning:/etc/grafana/provisioning
-      - .:/root/ertis-3-d-visualization-unity
+      - .:/root/ertis-unity-panel
 
     environment:
       NODE_ENV: development
-      GF_LOG_FILTERS: plugin.ertis-3-d-visualization-unity:debug
+      GF_LOG_FILTERS: plugin.ertis-unity-panel:debug
       GF_LOG_LEVEL: debug
       GF_DATAPROXY_LOGGING: 1
-      GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: ertis-3-d-visualization-unity
+      GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: ertis-unity-panel

@@ -1,17 +1,18 @@
 {
   "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
   "type": "panel",
-  "name": "Unity model",
-  "id": "ertis-3-d-visualization-unity",
+  "name": "Unity",
+  "id": "ertis-unity-panel",
   "info": {
-    "description": "3d visualization using unity",
+    "description": "Unity WebGL render in Grafana panel",
     "author": {
       "name": "ERTIS",
-      "url": ""
+      "url": "https://ertis.uma.es/"
     },
     "keywords": [
       "unity",
-      "3d"
+      "3D",
+      "webGL"
     ],
     "logos": {
       "small": "img/logo.svg",

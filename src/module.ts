@@ -22,7 +22,7 @@ export const plugin = new PanelPlugin<SimpleOptions>(UnityPanel).setPanelOptions
     .addStringArray({
       path: 'fields_to_send',
       name: 'Fields to send',
-      description: 'List of fields to be sent to the Unity model. If this field is not filled in, all available fields will be sent.',
+      description: 'List of fields to be sent to the Unity build. If this field is not filled in, all available fields will be sent.',
       defaultValue: [],
       category: ['Data options']
     })
@@ -64,15 +64,15 @@ export const plugin = new PanelPlugin<SimpleOptions>(UnityPanel).setPanelOptions
     })
     .addTextInput({
       path: 'folderUnityBuild',
-      name: 'Folder with Unity model',
-      description: 'Name of the folder that contains the Unity model files built in WebGL that we want to display. This should be inside the grafana public/unitybuild folder.',
+      name: 'Folder with Unity build',
+      description: 'Name of the folder that contains the Unity WebGL build files that we want to display. This should be inside the grafana public/unitybuild folder.',
       defaultValue: 'raspberry',
       category: ['Unity options']
     })
     .addTextInput({
       path: 'nameOfFilesUnityBuild',
       name: 'Unity build file names',
-      description: 'Name of the files obtained as a result of compiling the Unity model in WebGL. There must be 4 files with the same name and extensions: .data, .framework, .loader and .wasm. They must be contained in the folder specified in the previous field.',
+      description: 'Name of the files obtained as a result of compiling the Unity project in WebGL. There must be 4 files with the same name and extensions: .data, .framework, .loader and .wasm. They must be contained in the folder specified in the previous field.',
       defaultValue: 'myunityapp',
       category: ['Unity options']
     })
