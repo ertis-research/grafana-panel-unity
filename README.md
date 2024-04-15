@@ -1,5 +1,10 @@
 # Unity panel plugin
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/ertis-research/grafana-panel-unity/assets/48439828/4f8f92f8-e93f-4135-8ccd-9c053ca297b1">
+  <img src="https://github.com/ertis-research/grafana-panel-unity/assets/48439828/e7122b30-0dac-44c7-ae45-3623ca6dc5d0">
+</picture>
+
 This plugin provides a solution to render Unity WebGL builds directly inside a Grafana panel, allowing its integration into any dashboard. It also enables a bi-directional interaction between Grafana and Unity. This means that the Unity build can take advantage of data coming from Grafana data sources, and in turn, the running build can send data to the dashboard, affecting the rest of the dashboard. Of course, if the Unity compilation allows users to interact with it, this functionality will still be possible even if it is within a Grafana dashboard. Although it was originally designed as an extension to [OpenTwins](https://github.com/ertis-research/opentwins), our digital twin platform, it has no dependency on it, making it a versatile tool suitable for a variety of scenarios.
 
 ## Table of Contents
