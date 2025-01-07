@@ -48,8 +48,9 @@ export const Main: React.FC<Props> = ({ options, data, width, height }) => {
         const config = options.sendData.config as SendDataById
         const func = options.sendData.unityFunc
         let groupId = [config.idColumn]
-        if(options.sendData.groupBy) { groupId = {...groupId, ...getListGroupId(options.sendData.groupBy)} }
+        if(options.sendData.groupBy) { groupId = [...groupId, ...getListGroupId(options.sendData.groupBy)] }
         const dataGroup = groupBy(data, groupId)
+        console.log(dataGroup)
         Object.keys(dataGroup).forEach((id: any) => {
           unityContext.send(id, func, JSON.stringify({ series: dataGroup[id] }))
         })
@@ -57,6 +58,7 @@ export const Main: React.FC<Props> = ({ options, data, width, height }) => {
       } else {
         const config = options.sendData.config as SendAllData
         if(options.sendData.groupBy) { data = groupBy(data, getListGroupId(options.sendData.groupBy)) }
+        console.log(data)
         unityContext.send(config.recvGameObj, options.sendData.unityFunc, JSON.stringify({series: data}))
   
       }

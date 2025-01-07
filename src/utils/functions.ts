@@ -71,6 +71,6 @@ export const safeMergeLists = (list: any[]): any => {
     return list
 }
 
-export const getListGroupId = (group: string) => {
+export const getListGroupId = (group: string): string[] => {
     return group.split(";").map((s: string) => s.trim())
 }

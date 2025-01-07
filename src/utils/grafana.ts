@@ -54,10 +54,14 @@ export const getAllData = (data: PanelData) => {
     return res
 }
 
-export const groupBy = (data: any[], groupId: string[], isObject = true) => {
+export const groupBy = (data: any[], groupId: string[]) => {
     let res: any = {}
+    console.log("group ids", groupId)
+    console.log(Array.isArray(groupId))
+    console.log(groupId.length)
 
     if (groupId.length > 0) {
+        console.log("HOLA")
         const unionSeries: any[] = data.flat()
         unionSeries.forEach((item) => {
             const groupKey = item[groupId[0]];
@@ -67,6 +71,7 @@ export const groupBy = (data: any[], groupId: string[], isObject = true) => {
             const { [groupId[0]]: _, ...rest } = item
             res[groupKey].push(rest)
         })
+        console.log("res", res)
         if (groupId.length > 1) {
             Object.entries(res).forEach(([key, item]) => {
                 res[key] = groupBy(item as any[], groupId.slice(1))
