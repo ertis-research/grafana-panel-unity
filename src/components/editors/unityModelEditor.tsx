@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useEffect, useRef, useState, FocusEvent } from 'react'
+import React, { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react'
 import { SelectableValue, StandardEditorProps } from "@grafana/data";
 import { Field, Select, Input, FileDropzone, FileListItem } from '@grafana/ui';
 import { defaultUnityModel } from 'utils/defaults';
@@ -17,20 +17,19 @@ export const UnityModelEditor: React.FC<Props> = ({ item, value, onChange }) => 
     const modeOptions: ISelect[] = enumToSelect(SetUnityModelMode)
 
     const [mode, setMode] = useState<SelectableValue<SetUnityModelMode>>({ label: value.setFilesMode, value: value.setFilesMode })
-    const [unityFiles, setUnityFiles] = useState<UnityFiles>(defaultUnityModel.unityFiles)
+    //const [unityFiles, setUnityFiles] = useState<UnityFiles>({...value.unityFiles})
 
     
-    const handleOnBlurInput = (event: FocusEvent<HTMLInputElement>) => {
-        if (value.unityFiles) {
-            value.unityFiles[event.currentTarget.name as keyof UnityFiles] = event.target.value
-            onChange(value)
-        }
-    }
+    /*const handleOnBlurInput = (event: FocusEvent<HTMLInputElement>) => {
+        let aux = {...value}
+        aux.unityFiles = unityFiles
+        onChange(aux)
+    }*/
 
     const handleOnChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
-        let aux = {...unityFiles}
-        aux[event.currentTarget.name as keyof UnityFiles] = event.target.value
-        setUnityFiles(aux)
+        let aux = {...value}
+        aux.unityFiles[event.currentTarget.name as keyof UnityFiles] = event.target.value
+        onChange(aux)
     }
 
     const handleOnFileUpload = (result: string | ArrayBuffer | null, key: string) => {
@@ -46,7 +45,7 @@ export const UnityModelEditor: React.FC<Props> = ({ item, value, onChange }) => 
     }
 
     const clearFields = () => {
-        setUnityFiles(defaultUnityModel.unityFiles)
+        //setUnityFiles(defaultUnityModel.unityFiles)
         value.unityFiles = defaultUnityModel.unityFiles
         onChange(value)
     }
@@ -64,7 +63,7 @@ export const UnityModelEditor: React.FC<Props> = ({ item, value, onChange }) => 
     }
 
     const getFileItemIfAny = (name: NamesUnityModel, fileName: string) => {
-        const file = unityFiles[name as keyof UnityFiles]
+        const file = value.unityFiles[name as keyof UnityFiles]
         if (file !== undefined && file.length > 0) {
             //const blob: any = new Blob([file]); //
             return <FileListItem file={{ file: new File([], fileName), id: fileName, error: null }}
@@ -82,12 +81,12 @@ export const UnityModelEditor: React.FC<Props> = ({ item, value, onChange }) => 
         </Field>
     }
 
-    const InputComponent = useCallback(({ value, name, suffix }: { value: string, name: NamesUnityModel, suffix: string }) => {
-        console.log(name, value)
+    const InputComponent = useCallback(({ val, name, suffix }: { val: string, name: NamesUnityModel, suffix: string }) => {
+        if(mode.value === SetUnityModelMode.dragDrop) { val = ''}
         return <Field label={suffix}>
-            <Input name={name} value={value} required onChange={handleOnChangeInput} onBlur={handleOnBlurInput}/>
+            <Input name={name} value={val} required onChange={handleOnChangeInput}/>
         </Field>
-    }, [value])
+    }, [])
 
     const uploadFileMode = <div ref={divRef}>
         <FileDropComponent name="dataUrl" suffix=".data" />
@@ -97,10 +96,10 @@ export const UnityModelEditor: React.FC<Props> = ({ item, value, onChange }) => 
     </div>
 
     const setInputMode = <div>
-        <InputComponent value={unityFiles.dataUrl} name="dataUrl" suffix=".data" />
-        <InputComponent value={unityFiles.frameworkUrl} name="frameworkUrl" suffix=".framework.js" />
-        <InputComponent value={unityFiles.loaderUrl} name="loaderUrl" suffix=".loader.js" />
-        <InputComponent value={unityFiles.codeUrl} name="codeUrl" suffix=".wasm" />
+        <InputComponent val={value.unityFiles.dataUrl} name="dataUrl" suffix=".data" />
+        <InputComponent val={value.unityFiles.frameworkUrl} name="frameworkUrl" suffix=".framework.js" />
+        <InputComponent val={value.unityFiles.loaderUrl} name="loaderUrl" suffix=".loader.js" />
+        <InputComponent val={value.unityFiles.codeUrl} name="codeUrl" suffix=".wasm" />
     </div>
 
     useEffect(() => {
@@ -116,14 +115,6 @@ export const UnityModelEditor: React.FC<Props> = ({ item, value, onChange }) => 
             deleteSizeInfo()
         }
     }, [getFileItemIfAny])
-
-    useEffect(() => {
-        setUnityFiles(value.unityFiles)
-    }, [])
-
-    useEffect(() => {
-        console.log("AAAAAAAAAAAAAAAAAA")
-    }, [value])
 
     const getConfigByMode = () => {
         switch (mode.value) {
